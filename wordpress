@@ -1,0 +1,21 @@
+#!/bin/bash
+fi
+
+WP_DB_NAME=wordpress
+WP_DB_ADMIN_USER=wpadmin
+
+echo "HOSTNAME:"
+read HOSTNAME
+echo
+sudo mkdir -p /var/www/html/wordpress/src
+sudo mkdir -p /var/www/html/wordpress/blog
+cd /var/www/html/wordpress/src
+sudo wget https://wordpress.org/latest.tar.gz
+sudo tar -xvf latest.tar.gz
+sudo mv latest.tar.gz wordpress-`date "+%Y-%m-%d"`.tar.gz
+sudo mv wordpress/* ../blog/
+sudo chown -R www-data:www-data /var/www/html/wordpress/blog
+WP_SECURE_SALTS="$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)"
+
+WP_CONFIG_FILE=/var/www/html/wordpress/blog/wp-config.php
+cat > '${WP_CONFIG_FILE}' <<EOF
